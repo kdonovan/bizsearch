@@ -31,16 +31,45 @@ img {
   @extend .btn-primary;
   @extend .btn-lg;
   }
-// apply styles to HTML elements
-// to make views framework-neutral
-main {
-  @extend .container;
-  background-color: #eee;
-  padding-bottom: 80px;
-  width: 100%;
-  margin-top: 51px; // accommodate the navbar
+
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #000;
+  background: url(intro-bg.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  .navbar-fixed-top {
+    background-color: rgba(0, 0, 0, 0.2);
+    .a, .navbar-brand {
+      color: #FFF;
+    }
   }
-section {
-  @extend .row;
-  margin-top: 20px;
-  }
+}
+
+
+
+
+.intro {
+    width: 100%;
+    height: auto;
+    padding: 150px 0;
+    text-align: center;
+    color: #fff;
+}
+
+.intro .intro-body {
+    vertical-align: middle;
+}
+
+.intro .intro-body .brand-heading {
+    font-size: 40px;
+}
+
+.intro .intro-body .intro-text {
+    font-size: 18px;
+}
