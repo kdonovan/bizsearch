@@ -1,0 +1,48 @@
+#listings-table {
+  td.details-control {
+    background: image-url('details_open.png') no-repeat center center;
+    cursor: pointer;
+    padding: 0 10px;
+  }
+  
+  td.title .normal { display: inline; }
+  td.title .detail { display: none; }
+  tr.shown {
+    td.details-control {
+      background: image-url('details_close.png') no-repeat center center;
+    }
+    td.title .normal { display: none; }
+    td.title .detail { display: inline; }
+  }
+  .listing-detail {
+    margin-left: 25px;
+    color: #444;
+    font-size: 0.8em;
+    .buttons {
+      text-align: center;
+      margin: 10px;
+    }
+  }
+
+  tr {
+    td.status {
+      min-width: 80px;
+      .label {
+        display: inline;
+      }
+      .buttons {
+        display: none;
+      }
+    }
+  }
+  tr:hover {
+    td.status {
+      .label {
+        display: none !important;
+      }
+      .buttons {
+        display: block;
+      }
+    }
+  }
+}

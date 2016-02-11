@@ -13,7 +13,8 @@ gem 'haml-rails'
 gem 'high_voltage'
 gem 'mysql2', '~> 0.3.18'
 gem 'puma'
-gem 'simple_form'
+gem 'simple_form', '~> 3.2.1'
+gem 'state_machine', '~> 1.2.0'
 
 
 gem 'searchbot', path: "../searchbot"
@@ -36,10 +37,11 @@ group :development do
 end
 
 group :development, :test do
-  gem 'byebug'
+  gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'rspec-rails'
+  gem 'awesome_print'
 end
 
 group :test do

@@ -1,0 +1,70 @@
+%h3 Listings
+
+.row
+  %p.col-sm-6
+    - if most_recent = Listing.order(:created_at).last
+      Last listing pulled on #{most_recent.created_at.strftime("%B %e, %Y (%Z)")}
+    %em
+      (#{link_to 'refresh', run_searches_path, method: :post}).
+
+  %p.col-sm-6
+    %strong Showing:
+    = link_to_unless_current 'Yep', listings_path(status: :yep)
+    |
+    = link_to_unless_current 'Nope', listings_path(status: :nope)
+    |
+    = link_to_unless params[:status].blank? || params[:status] == 'maybe', 'Undecided', listings_path(status: :maybe)
+
+
+- if @listings.length > 0
+  %hr
+
+  %table#listings-table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th
+        %th Location
+        %th Price
+        %th Cashflow
+        %th Multiple
+        %th Status
+        %th Title
+        %th Body
+
+    %tbody
+      - @listings.each do |listing|
+        %tr.listing
+          %td.clickable
+          %td.clickable= [listing.state, listing.city].compact.join(', ')
+          %td.clickable= dollars listing.price
+          %td.clickable= dollars listing.cashflow
+          %td.clickable= listing.cashflow && listing.price ? (listing.price.to_f / listing.cashflow).round(2) : ''
+          %td.status
+            = listing_status listing
+            .buttons
+              - unless params[:status] == 'yep'
+                = link_to decide_on_listing_path(listing, decision: :yep), class: 'btn btn-xs btn-success', remote: true, method: :post do
+                  %span.glyphicon.glyphicon-thumbs-up
+              = link_to decide_on_listing_path(listing, decision: :maybe), class: 'btn btn-xs btn-primary', remote: true, method: :post do
+                %span.glyphicon.glyphicon-question-sign
+              - unless params[:status] == 'nope'
+                = link_to decide_on_listing_path(listing, decision: :nope), class: 'btn btn-xs btn-danger', remote: true, method: :post do
+                  %span.glyphicon.glyphicon-thumbs-down
+
+          %td.title
+            %span.normal= link_to listing.title, listing.link, target: '_blank'
+            %span.detail
+              = form_for :note, url: listing_notes_path(listing), method: :post, remote: true, html: {class: 'form note-form'} do |f|
+                = f.text_field :body, class: 'form-control', placeholder: 'Add note...'
+                = f.submit 'Save', class: 'btn btn-primary'
+
+                .badge
+                  Notes:
+                  %span.note_count= listing.notes.count
+
+          %td
+            .notes
+              - listing.notes.reverse.each do |note|
+                = listing_note listing, note
+            .well=raw format_description listing.description
+

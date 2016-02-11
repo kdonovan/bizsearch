@@ -1,0 +1,12 @@
+- type ||= 'default'
+- title ||= nil
+- close ||= nil
+
+.panel{class: "panel-#{type}"}
+  - if title
+    .panel-heading
+      %h3.panel-title
+        = title
+        = close
+  .panel-body
+    = body
