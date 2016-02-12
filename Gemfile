@@ -15,6 +15,7 @@ gem 'mysql2', '~> 0.3.18'
 gem 'puma'
 gem 'simple_form', '~> 3.2.1'
 gem 'state_machine', '~> 1.2.0'
+gem 'eel', '~> 1.0.3'
 
 
 gem 'searchbot', path: "../searchbot"
@@ -49,4 +50,6 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'selenium-webdriver'
+  gem 'vcr'
+  gem 'webmock'
 end

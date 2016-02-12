@@ -1,11 +1,9 @@
+# Ideally each business for sale has a single listing, delegating to separate SiteListings
+# as needed when the same business is listed on multiple sites.
 class Listing < ActiveRecord::Base
-  validates :title, presence: true
-
-  belongs_to :source
-  belongs_to :search # TODO: eventually this should be a has-and-belongs-to-many relationship so each search can list ALL it's results
-  has_many :notes
-
-  UNWANTED_SEARCHBOT_FIELDS = %i(cashflow_from location source_klass teaser)
+  has_many :site_listings, dependent: :destroy
+  has_many :notes, dependent: :destroy
+  has_and_belongs_to_many :saved_searches
 
   scope :undecided, -> { where(status: ['unseen', 'maybe']) }
   scope :yep, -> { where(status: 'yep') }
@@ -31,32 +29,47 @@ class Listing < ActiveRecord::Base
 
   end
 
-  def self.handle_new(result, source)
-    result = result.detail # Ensure we're working with the full page record
-    keys   = result.keys - UNWANTED_SEARCHBOT_FIELDS
-    params = keys.each_with_object({}) do |key, hash|
-      # Explicitly send, not just to_hash, because we have custom formatting logic in getter methods
-      hash[key] = result.send(key)
+  def primary_site_listing
+    site_listings.first
+  end
+
+  def self.delegate_first_not_nil(*fields)
+    fields.each do |field|
+      define_method field do
+        site_listings.detect {|l| l.send(field) }.try(field)
+      end
     end
-    params[:source] = source
-    params[:identifier] = params.delete(:id)
-
-
-    # TODO: eventually, link/deduplicate matching listings across sources
-
-    return if skip_listing?(params)
-
-    Listing.where(params).first_or_create!
   end
 
-  private
 
-  # Allow custom filters (eventually will be user-by-user or search-by-search basis)
-  STOPWORDS = [] # %w(plumber plumbing contractor)
-
-  def self.skip_listing?(params)
-    STOPWORDS.present? && params[:title] =~ /#{STOPWORDS.join('|')}/i
+  def self.delegate_lowest(*fields)
+    fields.each do |field|
+      define_method field do
+        site_listings.map {|l| l.send(field) }.compact.min
+      end
+    end
   end
 
+  delegate :title, :description, :city, :state, to: :primary_site_listing
+
+  delegate_first_not_nil :reason_selling, :seller_financing, :employees, :established
+
+  delegate_lowest :price, :cashflow, :revenue, :ffe, :inventory, :real_estate
+
+
+  def self.import(result, source:, saved_search:)
+    return unless sl = SiteListing.handle_new(result, source: source)
+    dups    = sl.duplicates_on_other_networks(saved_search)
+    listing = sl.listing || dups.detect(&:listing).try(:listing) || Listing.new
+    listing.saved_searches << saved_search unless listing.saved_searches.include?(saved_search)
+
+    dups.each do |dup|
+      dup.update_attributes(listing: listing)
+    end
+
+    sl.update_attributes!(listing: listing)
+
+    return listing
+  end
 
 end

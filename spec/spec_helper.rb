@@ -90,3 +90,12 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+
+require 'vcr'
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/cassettes"
+  config.hook_into :webmock # or :fakeweb
+  config.configure_rspec_metadata!
+end

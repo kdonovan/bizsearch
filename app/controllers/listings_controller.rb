@@ -4,7 +4,7 @@ class ListingsController < ApplicationController
 
   def index
     scope = %w(yep nope).include?(params[:status]) ? params[:status] : 'undecided'
-    @listings = Listing.send(scope)
+    @listings = Listing.send(scope).includes(:site_listings)
   end
 
   def refresh

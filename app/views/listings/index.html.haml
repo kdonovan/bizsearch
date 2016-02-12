@@ -41,6 +41,8 @@
           %td.clickable= listing.cashflow && listing.price ? (listing.price.to_f / listing.cashflow).round(2) : ''
           %td.status
             = listing_status listing
+            - if (count = listing.site_listings.size) > 1
+              .badge #{count} networks
             .buttons
               - unless params[:status] == 'yep'
                 = link_to decide_on_listing_path(listing, decision: :yep), class: 'btn btn-xs btn-success', remote: true, method: :post do
@@ -52,7 +54,7 @@
                   %span.glyphicon.glyphicon-thumbs-down
 
           %td.title
-            %span.normal= link_to listing.title, listing.link, target: '_blank'
+            %span.normal= listing.title
             %span.detail
               = form_for :note, url: listing_notes_path(listing), method: :post, remote: true, html: {class: 'form note-form'} do |f|
                 = f.text_field :body, class: 'form-control', placeholder: 'Add note...'
@@ -66,5 +68,6 @@
             .notes
               - listing.notes.reverse.each do |note|
                 = listing_note listing, note
+            .well=raw listing.site_listings.map { |sl| link_to sl.source.name, sl.link, target: '_blank' }.join(' | ')
             .well=raw format_description listing.description
 
