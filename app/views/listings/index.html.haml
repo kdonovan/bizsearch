@@ -27,6 +27,7 @@
         %th Location
         %th Price
         %th Cashflow
+        %th Projected
         %th Multiple
         %th Status
         %th Title
@@ -39,7 +40,10 @@
           %td.clickable= [listing.state, listing.city].compact.join(', ')
           %td.clickable= dollars listing.price
           %td.clickable= dollars listing.cashflow
-          %td.clickable= listing.cashflow && listing.price ? (listing.price.to_f / listing.cashflow).round(2) : ''
+          - flow = listing.repayment_projection.cashflow_after_repayment
+          %td.clickable{class: flow.to_i > 0 ? 'text-muted' : 'text-danger'}= dollars flow
+          %td.clickable= listing.multiple
+
           %td.status
             = listing_status listing
             .buttons
@@ -87,5 +91,6 @@
 
 %h3 Caveats:
 %ul
+  %li Projections may be invalid for listings with e.g. real estate or inventory not included in purchase price.
   %li Listings attempt to properly group duplicates across different networks, but may fail (especially if numbers change between postings).
   %li If a listing is reposted on the same network, that'll count as a new/separate post (although depending on if numbers were changed, if it's on a second network as well the deduplication process there may bundle it as well).

@@ -41,7 +41,6 @@ class Listing < ActiveRecord::Base
     end
   end
 
-
   def self.delegate_lowest(*fields)
     fields.each do |field|
       define_method field do
@@ -56,7 +55,6 @@ class Listing < ActiveRecord::Base
 
   delegate_lowest :price, :cashflow, :revenue, :ffe, :inventory, :real_estate
 
-
   def self.import(result, site:, saved_search:)
     return unless sl = SiteListing.handle_new(result, site: site)
     dups    = sl.duplicates_on_other_networks(saved_search)
@@ -70,6 +68,15 @@ class Listing < ActiveRecord::Base
     sl.update_attributes!(listing: listing)
 
     return listing
+  end
+
+  def repayment_projection
+    RepaymentProjection.new(self)
+  end
+
+  def multiple
+    return unless cashflow && price
+    (price.to_f / cashflow).round(2)
   end
 
 end

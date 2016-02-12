@@ -14,6 +14,7 @@ initListingTable = ->
       { data: "location" },
       { data: "price" },
       { data: "cashflow" },
+      { data: "projected" },
       { data: "multiple" },
       { data: "status" },
       { data: "title" },
@@ -22,7 +23,7 @@ initListingTable = ->
         visible: false
       }
     ],
-    order: [[5, 'desc'], [3, 'desc']]
+    order: [[6, 'desc'], [3, 'desc']]
   })
 
   # Add event listener for opening and closing details
