@@ -1,20 +1,20 @@
 # SiteListing represents listing from a specific site (as opposed to generic Listing)
 class SiteListing < ActiveRecord::Base
-  belongs_to :source
+  belongs_to :site
   belongs_to :listing
 
   validates :listing, presence: true
   validates :title, presence: true
 
-  def self.handle_new(result, source:)
-    sl = SiteListing.where(source: source, identifier: result[:id]).first_or_initialize
+  def self.handle_new(result, site:)
+    sl = SiteListing.where(site: site, identifier: result[:id]).first_or_initialize
     sl.attributes = params_from_result(result)
     sl.skip_listing? ? nil : sl
   end
 
-  # Listings from other sources that may duplicate this one
+  # Listings from other sites that may duplicate this one
   def duplicates_on_other_networks(saved_search)
-    scope = saved_search.site_listings.where.not(source_id: source.id)
+    scope = saved_search.site_listings.where.not(site_id: site.id)
 
     %i(city state established).each do |attr|
       scope = narrow_by(scope, attr)

@@ -1,0 +1,14 @@
+- @modal_title = "Compare Site Listings"
+- @modal_size = :large
+
+%table.table
+  %thead
+    %tr
+      %th &nbsp;
+      - @site_listings.each do |sl|
+        %th= sl.site.name
+  %tbody
+    = compare_site_listings %w(title city state)
+    = compare_site_listings(%w(price cashflow revenue ffe inventory real_estate)) { |v| dollars(v) }
+    = compare_site_listings %w(inventory_included real_estate_included employees established reason_selling seller_financing created_at updated_at description)
+    = compare_site_listings(%w(link)) { |v| link_to v, v, target: '_blank' }

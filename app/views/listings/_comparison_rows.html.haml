@@ -1,0 +1,6 @@
+- rows.each do |row|
+  %tr
+    %th= row[:title]
+    - row[:values].each do |v|
+      %td= v
+

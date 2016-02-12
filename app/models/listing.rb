@@ -57,8 +57,8 @@ class Listing < ActiveRecord::Base
   delegate_lowest :price, :cashflow, :revenue, :ffe, :inventory, :real_estate
 
 
-  def self.import(result, source:, saved_search:)
-    return unless sl = SiteListing.handle_new(result, source: source)
+  def self.import(result, site:, saved_search:)
+    return unless sl = SiteListing.handle_new(result, site: site)
     dups    = sl.duplicates_on_other_networks(saved_search)
     listing = sl.listing || dups.detect(&:listing).try(:listing) || Listing.new
     listing.saved_searches << saved_search unless listing.saved_searches.include?(saved_search)

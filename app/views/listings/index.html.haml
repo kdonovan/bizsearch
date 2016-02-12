@@ -1,5 +1,6 @@
 %h3 Listings
 
+
 .row
   %p.col-sm-6
     - if most_recent = Listing.order(:created_at).last
@@ -41,8 +42,6 @@
           %td.clickable= listing.cashflow && listing.price ? (listing.price.to_f / listing.cashflow).round(2) : ''
           %td.status
             = listing_status listing
-            - if (count = listing.site_listings.size) > 1
-              .badge #{count} networks
             .buttons
               - unless params[:status] == 'yep'
                 = link_to decide_on_listing_path(listing, decision: :yep), class: 'btn btn-xs btn-success', remote: true, method: :post do
@@ -53,21 +52,40 @@
                 = link_to decide_on_listing_path(listing, decision: :nope), class: 'btn btn-xs btn-danger', remote: true, method: :post do
                   %span.glyphicon.glyphicon-thumbs-down
 
-          %td.title
-            %span.normal= listing.title
-            %span.detail
+          %td.clickable.title
+            .normal
+              = listing.title
+              .badge{class: (sl_count = listing.site_listings.size) > 1 ? '' : 'hidden'} #{sl_count} sites
+              .badge{class: (note_count = listing.notes.count) > 0 ? '' : 'hidden'}
+                Notes:
+                %span.note_count= note_count
+            .detail
               = form_for :note, url: listing_notes_path(listing), method: :post, remote: true, html: {class: 'form note-form'} do |f|
                 = f.text_field :body, class: 'form-control', placeholder: 'Add note...'
                 = f.submit 'Save', class: 'btn btn-primary'
 
-                .badge
-                  Notes:
-                  %span.note_count= listing.notes.count
+          %td.details
+            .well.clearfix
+              .pull-right
+                %strong= pluralize sl_count, 'Site:', 'Sites:'
+                =raw listing.site_listings.map { |sl| link_to sl.site.name, sl.link, target: '_blank' }.join(' | ')
+                ||
+                = link_to 'Details', compare_site_listings_path(listing), remote: true, class: 'remote-modal'
+              .pull-left
+                First seen
+                %strong #{time_ago_in_words listing.created_at} ago
 
-          %td
+
             .notes
               - listing.notes.reverse.each do |note|
                 = listing_note listing, note
-            .well=raw listing.site_listings.map { |sl| link_to sl.source.name, sl.link, target: '_blank' }.join(' | ')
+
             .well=raw format_description listing.description
 
+
+%hr
+
+%h3 Caveats:
+%ul
+  %li Listings attempt to properly group duplicates across different networks, but may fail (especially if numbers change between postings).
+  %li If a listing is reposted on the same network, that'll count as a new/separate post (although depending on if numbers were changed, if it's on a second network as well the deduplication process there may bundle it as well).

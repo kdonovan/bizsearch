@@ -25,10 +25,10 @@
         %td= search.listings.count
         %td
           |
-          - Source.all.each do |source|
-            - src = source.source_class.new( search.as_filter )
+          - Site.all.each do |site|
+            - src = site.adapter.new( search.as_filter )
             - if src.respond_to?(:url_for_page)
-              = link_to source.name, src.url_for_page(1), target: '_blank'
+              = link_to site.name, src.url_for_page(1), target: '_blank'
             - else
-              #{source.name} (API Only)
+              #{site.name} (API Only)
             |

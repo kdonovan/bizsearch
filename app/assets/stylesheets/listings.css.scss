@@ -2,9 +2,9 @@
   td.details-control {
     background: image-url('details_open.png') no-repeat center center;
     cursor: pointer;
-    padding: 0 10px;
+    padding: 0 12px;
   }
-  
+
   td.title .normal { display: inline; }
   td.title .detail { display: none; }
   tr.shown {
@@ -15,12 +15,19 @@
     td.title .detail { display: inline; }
   }
   .listing-detail {
-    margin-left: 25px;
+    margin: 10px;
     color: #444;
     font-size: 0.8em;
     .buttons {
       text-align: center;
       margin: 10px;
+    }
+    .well {
+      margin-bottom: 10px;
+      padding: 15px;
+      h6:first-child {
+        margin-top: 0;
+      }
     }
   }
 
@@ -45,4 +52,16 @@
       }
     }
   }
+  tr.child-row td {
+    padding: 0;
+    box-shadow: inset 4px 5px 10px -4px #ABABAB;
+    background: #ddd
+  }
+  tbody tr {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+}
+table#listings-table.table.table-striped tr.child-row td {
+  background: #FAFAFA;
 }

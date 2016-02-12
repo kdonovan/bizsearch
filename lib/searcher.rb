@@ -1,34 +1,34 @@
 class Searcher
 
   def search
-    sources.flat_map do |src|
+    sites.flat_map do |site|
       saved_searches.flat_map do |search|
-        search_source(src, search)
+        search_site(site, search)
       end
     end.uniq
   end
 
   private
 
-  def sources
-    # TODO: once fix the BizBuySell IP-based restriction, re-enable that source
-    Source.where.not(name: 'BizBuySell')
+  def sites
+    # TODO: once fix the BizBuySell IP-based restriction, re-enable that site
+    Site.where.not(name: 'BizBuySell')
   end
 
   def saved_searches
     SavedSearch.all
   end
 
-  def search_source(source, saved_search)
-    adapter(source, saved_search).results.map do |result|
-      Listing.import( result, saved_search: saved_search, source: source )
+  def search_site(site, saved_search)
+    adapter(site, saved_search).results.map do |result|
+      Listing.import( result, saved_search: saved_search, site: site )
     end
   end
 
-  def adapter(source, saved_search)
-    seen_ids = saved_search.site_listings.where(:source_id.eq source.id).pluck('DISTINCT(identifier)')
+  def adapter(site, saved_search)
+    seen_ids = saved_search.site_listings.where(:site_id.eq site.id).pluck('DISTINCT(identifier)')
 
-    source.source_class.new( saved_search.as_filter, seen: seen_ids )
+    site.adapter.new( saved_search.as_filter, seen: seen_ids )
   end
 
 end

@@ -14,7 +14,7 @@ class AddInitialStructure < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    create_table :sources do |t|
+    create_table :sites do |t|
       t.string :name
     end
 
@@ -29,7 +29,7 @@ class AddInitialStructure < ActiveRecord::Migration
     end
 
     create_table :site_listings do |t|
-      t.belongs_to :source, :listing
+      t.belongs_to :site, :listing
       t.string :identifier, :title, :link, required: true
       t.integer :price, :cashflow, :revenue
 

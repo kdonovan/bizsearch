@@ -1,5 +1,5 @@
 class ListingsController < ApplicationController
-  before_action :get_listing, only: [:decide]
+  before_action :get_listing, only: [:decide, :compare]
 
 
   def index
@@ -19,6 +19,11 @@ class ListingsController < ApplicationController
 
     @listing.send( params[:decision] )
     render(nothing: true, status: 200)
+  end
+
+  def compare
+    @site_listings = @listing.site_listings
+    render layout: 'modal'
   end
 
   private
