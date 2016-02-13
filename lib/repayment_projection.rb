@@ -28,6 +28,27 @@ class RepaymentProjection
     listing.cashflow - yearly
   end
 
+  def cashflow_post_tax_and_repayment
+    return unless listing.cashflow
+    ((1 - tax_rate) * listing.cashflow) - yearly
+  end
+
+  def tax_rate
+    base = 0.33
+
+    # ROUGH ESTIMATES! http://www.money-zine.com/financial-planning/tax-shelter/state-income-tax-rates/
+    state = case listing&.state
+    when %w(AK FL NV SD TX WA WY) then 0
+    when 'CA' then 0.10
+    when 'OR' then 0.09
+    when 'HI' then 0.08
+    when 'CO' then 0.047
+    else 0.08 # rough guess for the others
+    end
+
+    base + state
+  end
+
 end
 
 

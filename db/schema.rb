@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 20160210231753) do
   add_index "saved_searches", ["priority"], name: "index_saved_searches_on_priority", using: :btree
 
   create_table "site_listings", force: :cascade do |t|
-    t.integer  "source_id",            limit: 4
+    t.integer  "site_id",              limit: 4
     t.integer  "listing_id",           limit: 4
     t.string   "identifier",           limit: 255
     t.string   "title",                limit: 255
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20160210231753) do
     t.datetime "updated_at",                         null: false
   end
 
-  create_table "sources", force: :cascade do |t|
+  create_table "sites", force: :cascade do |t|
     t.string "name", limit: 255
   end
 

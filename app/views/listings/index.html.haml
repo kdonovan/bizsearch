@@ -27,7 +27,7 @@
         %th Location
         %th Price
         %th Cashflow
-        %th Projected
+        %th Projected (post tax)
         %th Multiple
         %th Status
         %th Title
@@ -40,8 +40,11 @@
           %td.clickable= [listing.state, listing.city].compact.join(', ')
           %td.clickable= dollars listing.price
           %td.clickable= dollars listing.cashflow
-          - flow = listing.repayment_projection.cashflow_after_repayment
-          %td.clickable{class: flow.to_i > 0 ? 'text-muted' : 'text-danger'}= dollars flow
+          %td.clickable
+            - if cash = listing.repayment_projection.cashflow_after_repayment
+              .pull-left{class: cash > 0 ? 'text-muted' : 'text-danger'}= dollars cash
+            - if cash = listing.repayment_projection.cashflow_post_tax_and_repayment
+              .pull-right{class: cash > 0 ? 'text-muted' : 'text-danger'} (#{dollars cash})
           %td.clickable= listing.multiple
 
           %td.status

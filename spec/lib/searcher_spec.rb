@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Searcher do
+  let(:results) { Searcher.new.import_search_results }
 
   before(:each) do
     Searchbot.sources.each do |src|
@@ -11,9 +12,9 @@ describe Searcher do
   end
 
   it "combines duplicates across networks", vcr: {match_requests_on: [:method, :uri, :body]} do
-    results = Searcher.new.search
-    binding.pry
-    expect( results.length ).not_to eq 0
+    expect( results.length ).to be > 0
+    expect( Listing.count ).to be > 0
+    expect( Listing.count ).to be < SiteListing.count
   end
 
 end

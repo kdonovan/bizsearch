@@ -1,6 +1,6 @@
 class Searcher
 
-  def search
+  def import_search_results
     sites.flat_map do |site|
       saved_searches.flat_map do |search|
         search_site(site, search)
