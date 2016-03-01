@@ -1,10 +1,10 @@
 class ListingsController < ApplicationController
+  before_action :authenticate_user!
   before_action :get_listing, only: [:decide, :compare]
-
 
   def index
     scope = %w(yep nope).include?(params[:status]) ? params[:status] : 'undecided'
-    @listings = Listing.send(scope).includes(:site_listings)
+    @listings = current_user.listings.send(scope).includes(:site_listings)
   end
 
   def refresh
@@ -29,7 +29,7 @@ class ListingsController < ApplicationController
   private
 
   def get_listing
-    @listing = Listing.find(params[:id])
+    @listing = current_user.listings.find(params[:id])
   end
 
 end

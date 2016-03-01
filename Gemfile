@@ -12,15 +12,19 @@ gem 'jbuilder', '~> 2.0'
 gem 'bootstrap-sass'
 gem 'haml-rails'
 gem 'high_voltage'
-gem 'mysql2', '~> 0.3.18'
-gem 'puma'
+gem 'pg', '~> 0.18.4'
 gem 'simple_form', '~> 3.2.1'
 gem 'state_machine', '~> 1.2.0'
 gem 'eel', '~> 1.0.3'
+gem 'env'
 
+# TODO: upgrade to stable 4.0
+gem 'devise', '~> 4.0.0.rc1'
 
 gem 'searchbot', path: "../searchbot"
 gem 'sucker_punch' # TODO: replace with sidekiq
+
+gem 'puma'
 
 group :development do
   gem 'web-console', '~> 2.0'

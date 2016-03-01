@@ -76,4 +76,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  raise "Must define default_url_options (and Devise's mailer_sender) before deploying this to production"
 end

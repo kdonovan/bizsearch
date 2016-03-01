@@ -11,74 +11,115 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210231753) do
+ActiveRecord::Schema.define(version: 20160301160000) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "listings", force: :cascade do |t|
-    t.string   "status",     limit: 255, default: "unseen"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.integer  "user_id"
+    t.string   "status",     default: "unseen"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   add_index "listings", ["status"], name: "index_listings_on_status", using: :btree
+  add_index "listings", ["user_id"], name: "index_listings_on_user_id", using: :btree
 
   create_table "listings_saved_searches", id: false, force: :cascade do |t|
-    t.integer "listing_id",      limit: 4
-    t.integer "saved_search_id", limit: 4
+    t.integer "listing_id"
+    t.integer "saved_search_id"
   end
 
   add_index "listings_saved_searches", ["listing_id"], name: "index_listings_saved_searches_on_listing_id", using: :btree
   add_index "listings_saved_searches", ["saved_search_id"], name: "index_listings_saved_searches_on_saved_search_id", using: :btree
 
   create_table "notes", force: :cascade do |t|
-    t.integer  "listing_id", limit: 4
-    t.text     "body",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "user_id"
+    t.integer  "listing_id"
+    t.text     "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
+  add_index "notes", ["listing_id"], name: "index_notes_on_listing_id", using: :btree
+  add_index "notes", ["user_id"], name: "index_notes_on_user_id", using: :btree
+
   create_table "saved_searches", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.string   "state",        limit: 255
-    t.string   "city",         limit: 255
-    t.string   "keyword",      limit: 255
-    t.integer  "min_price",    limit: 4
-    t.integer  "max_price",    limit: 4
-    t.integer  "min_cashflow", limit: 4
-    t.integer  "max_cashflow", limit: 4
-    t.integer  "priority",     limit: 4,   default: 10
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.integer  "search_group_id"
+    t.string   "name"
+    t.string   "state"
+    t.string   "city"
+    t.string   "keyword"
+    t.integer  "min_price"
+    t.integer  "max_price"
+    t.integer  "min_cashflow"
+    t.integer  "max_cashflow"
+    t.integer  "priority",        default: 10
+    t.string   "site_names",                                array: true
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "saved_searches", ["priority"], name: "index_saved_searches_on_priority", using: :btree
+  add_index "saved_searches", ["search_group_id"], name: "index_saved_searches_on_search_group_id", using: :btree
+
+  create_table "search_groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "search_groups", ["user_id"], name: "index_search_groups_on_user_id", using: :btree
 
   create_table "site_listings", force: :cascade do |t|
-    t.integer  "site_id",              limit: 4
-    t.integer  "listing_id",           limit: 4
-    t.string   "identifier",           limit: 255
-    t.string   "title",                limit: 255
-    t.string   "link",                 limit: 255
-    t.integer  "price",                limit: 4
-    t.integer  "cashflow",             limit: 4
-    t.integer  "revenue",              limit: 4
-    t.text     "description",          limit: 65535
-    t.string   "city",                 limit: 255
-    t.string   "state",                limit: 255
-    t.integer  "ffe",                  limit: 4
-    t.integer  "inventory",            limit: 4
-    t.integer  "real_estate",          limit: 4
-    t.integer  "employees",            limit: 4
-    t.integer  "established",          limit: 4
-    t.string   "reason_selling",       limit: 255
+    t.integer  "site_id"
+    t.integer  "listing_id"
+    t.string   "identifier"
+    t.string   "title"
+    t.string   "link"
+    t.integer  "price"
+    t.integer  "cashflow"
+    t.integer  "revenue"
+    t.text     "description"
+    t.string   "city"
+    t.string   "state"
+    t.string   "business_url"
+    t.integer  "ffe"
+    t.integer  "inventory"
+    t.integer  "real_estate"
+    t.integer  "employees"
+    t.integer  "established"
+    t.string   "reason_selling"
     t.boolean  "seller_financing"
     t.boolean  "inventory_included"
     t.boolean  "real_estate_included"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "sites", force: :cascade do |t|
-    t.string "name", limit: 255
+    t.string "name"
+    t.string "kind"
   end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

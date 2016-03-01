@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
+  devise_for :users
   root to: 'visitors#index'
+
   get 'saved_searches', to: 'visitors#saved_searches'
   get 'listings', to: 'listings#index'
   post '/listings/refresh', to: 'listings#refresh', as: 'run_searches'

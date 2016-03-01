@@ -14,27 +14,31 @@ Searchbot.website_sources.each do |src|
   Site.create(name: src.name.split('::').last, kind: :website)
 end
 
-SavedSearch.create name: 'Seattle Test',      min_price: 200_000, state: 'Washington', city: 'Seattle'
+user = User.create email: 'abc@def.com', password: 'password', password_confirmation: 'password'
 
-# SavedSearch.create name: 'Seattle',         min_cashflow: 150_000, priority: 1000, state: 'Washington',    city: 'Seattle'
-# SavedSearch.create name: 'Bellingham',      min_cashflow: 200_000, priority: 100,  state: 'Washington',    city: 'Bellingham'
-# SavedSearch.create name: 'Pt. Townsend',    min_cashflow: 200_000, priority: 100,  state: 'Washington',    city: 'Townsend'
-# SavedSearch.create name: 'Washington',      min_cashflow: 200_000, priority: 80,   state: 'Washington'
-# SavedSearch.create name: 'Oregon',          min_cashflow: 250_000, priority: 70,   state: 'Oregon'
+group = user.search_groups.create name: 'Seattle Businesses'
 
-# SavedSearch.create name: 'San Diego',       min_cashflow: 200_000, priority: 80,  state: 'California',     city: 'San Diego'
-# SavedSearch.create name: 'Austin',          min_cashflow: 250_000, priority: 80,  state: 'Texas',          city: 'Austin'
-# SavedSearch.create name: 'Key West',        min_cashflow: 250_000, priority: 80,  state: 'Florida',        city: 'Key West'
+group.saved_searches.create name: 'Seattle Test',      min_price: 200_000, state: 'Washington', city: 'Seattle'
 
-# SavedSearch.create name: 'New Orleans',     min_cashflow: 350_000, priority: 70,  state: 'Louisiana',      city: 'New Orleans'
-# SavedSearch.create name: 'Charleston',      min_cashflow: 350_000, priority: 70,  state: 'South Carolina', city: 'Charleston'
-# SavedSearch.create name: 'Miami',           min_cashflow: 350_000, priority: 70,  state: 'Florida',        city: 'Miami'
+# group.saved_searches name: 'Seattle',         min_cashflow: 150_000, priority: 1000, state: 'Washington',    city: 'Seattle'
+# group.saved_searches name: 'Bellingham',      min_cashflow: 200_000, priority: 100,  state: 'Washington',    city: 'Bellingham'
+# group.saved_searches name: 'Pt. Townsend',    min_cashflow: 200_000, priority: 100,  state: 'Washington',    city: 'Townsend'
+# group.saved_searches name: 'Washington',      min_cashflow: 200_000, priority: 80,   state: 'Washington'
+# group.saved_searches name: 'Oregon',          min_cashflow: 250_000, priority: 70,   state: 'Oregon'
 
-# SavedSearch.create name: 'Absentee - OR',   min_cashflow: 350_000, priority: 60, state: 'Oregon',          keyword: 'absentee'
-# SavedSearch.create name: 'Absentee - CA',   min_cashflow: 350_000, priority: 60, state: 'California',      keyword: 'absentee'
-# SavedSearch.create name: 'Absentee - AK',   min_cashflow: 350_000, priority: 60, state: 'Alaska',          keyword: 'absentee'
-# SavedSearch.create name: 'Absentee - HI',   min_cashflow: 350_000, priority: 60, state: 'Hawaii',          keyword: 'absentee'
+# group.saved_searches name: 'San Diego',       min_cashflow: 200_000, priority: 80,  state: 'California',     city: 'San Diego'
+# group.saved_searches name: 'Austin',          min_cashflow: 250_000, priority: 80,  state: 'Texas',          city: 'Austin'
+# group.saved_searches name: 'Key West',        min_cashflow: 250_000, priority: 80,  state: 'Florida',        city: 'Key West'
 
-SavedSearch.update_all max_price: 2_000_000, sources: :business
+# group.saved_searches name: 'New Orleans',     min_cashflow: 350_000, priority: 70,  state: 'Louisiana',      city: 'New Orleans'
+# group.saved_searches name: 'Charleston',      min_cashflow: 350_000, priority: 70,  state: 'South Carolina', city: 'Charleston'
+# group.saved_searches name: 'Miami',           min_cashflow: 350_000, priority: 70,  state: 'Florida',        city: 'Miami'
+
+# group.saved_searches name: 'Absentee - OR',   min_cashflow: 350_000, priority: 60, state: 'Oregon',          keyword: 'absentee'
+# group.saved_searches name: 'Absentee - CA',   min_cashflow: 350_000, priority: 60, state: 'California',      keyword: 'absentee'
+# group.saved_searches name: 'Absentee - AK',   min_cashflow: 350_000, priority: 60, state: 'Alaska',          keyword: 'absentee'
+# group.saved_searches name: 'Absentee - HI',   min_cashflow: 350_000, priority: 60, state: 'Hawaii',          keyword: 'absentee'
+
+SavedSearch.update_all max_price: 2_000_000, site_names: ['business']
 
 # TODO: allow saved search to specify which sources to use

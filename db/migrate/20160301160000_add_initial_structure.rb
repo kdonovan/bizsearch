@@ -1,6 +1,21 @@
 class AddInitialStructure < ActiveRecord::Migration
   def change
+    create_table :search_groups do |t|
+      t.string :name
+      t.belongs_to :user, index: true
+      t.timestamps null: false
+    end
+
+    create_table :notes do |t|
+      t.belongs_to :user, index: true
+      t.belongs_to :listing, index: true
+      t.text :body
+
+      t.timestamps null: false
+    end
+
     create_table :saved_searches do |t|
+      t.belongs_to :search_group, index: true
       t.string :name
       t.string :state
       t.string :city
@@ -11,7 +26,7 @@ class AddInitialStructure < ActiveRecord::Migration
       t.integer :max_cashflow
       t.integer :priority, default: 10, index: true
 
-      t.string :sources
+      t.string :site_names, array: true
       t.timestamps null: false
     end
 
@@ -21,6 +36,7 @@ class AddInitialStructure < ActiveRecord::Migration
     end
 
     create_table :listings do |t|
+      t.belongs_to :user, index: true
       t.string :status, default: 'unseen', index: true
       t.timestamps null: false
     end
