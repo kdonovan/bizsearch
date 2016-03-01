@@ -20,7 +20,7 @@ gem 'eel', '~> 1.0.3'
 
 
 gem 'searchbot', path: "../searchbot"
-
+gem 'sucker_punch' # TODO: replace with sidekiq
 
 group :development do
   gem 'web-console', '~> 2.0'

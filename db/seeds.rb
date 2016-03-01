@@ -6,8 +6,12 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Searchbot.sources.each do |src|
-  Site.create(name: src.name.split('::').last)
+Searchbot.business_sources.each do |src|
+  Site.create(name: src.name.split('::').last, kind: :business)
+end
+
+Searchbot.website_sources.each do |src|
+  Site.create(name: src.name.split('::').last, kind: :website)
 end
 
 SavedSearch.create name: 'Seattle Test',      min_price: 200_000, state: 'Washington', city: 'Seattle'
@@ -31,4 +35,6 @@ SavedSearch.create name: 'Seattle Test',      min_price: 200_000, state: 'Washin
 # SavedSearch.create name: 'Absentee - AK',   min_cashflow: 350_000, priority: 60, state: 'Alaska',          keyword: 'absentee'
 # SavedSearch.create name: 'Absentee - HI',   min_cashflow: 350_000, priority: 60, state: 'Hawaii',          keyword: 'absentee'
 
-SavedSearch.update_all max_price: 2_000_000
+SavedSearch.update_all max_price: 2_000_000, sources: :business
+
+# TODO: allow saved search to specify which sources to use

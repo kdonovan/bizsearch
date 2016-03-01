@@ -11,11 +11,13 @@ class AddInitialStructure < ActiveRecord::Migration
       t.integer :max_cashflow
       t.integer :priority, default: 10, index: true
 
+      t.string :sources
       t.timestamps null: false
     end
 
     create_table :sites do |t|
       t.string :name
+      t.string :kind
     end
 
     create_table :listings do |t|

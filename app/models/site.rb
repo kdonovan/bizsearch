@@ -3,6 +3,9 @@ class Site < ActiveRecord::Base
 
   has_many :listings
 
+  scope :website, -> { where(kind: :website) }
+  scope :business, -> { where(kind: :business) }
+
   def adapter
     @adapter ||= "Searchbot::Sources::#{name}".constantize
   end
