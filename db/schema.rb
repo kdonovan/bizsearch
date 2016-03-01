@@ -48,17 +48,21 @@ ActiveRecord::Schema.define(version: 20160301160000) do
   create_table "saved_searches", force: :cascade do |t|
     t.integer  "search_group_id"
     t.string   "name"
-    t.string   "state"
     t.string   "city"
+    t.string   "state"
     t.string   "keyword"
     t.integer  "min_price"
     t.integer  "max_price"
     t.integer  "min_cashflow"
     t.integer  "max_cashflow"
-    t.integer  "priority",        default: 10
-    t.string   "site_names",                                array: true
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "min_revenue"
+    t.integer  "max_revenue"
+    t.decimal  "min_ratio",       precision: 3, scale: 1
+    t.decimal  "max_ratio",       precision: 3, scale: 1
+    t.integer  "priority",                                default: 10
+    t.string   "site_names",                                                        array: true
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
   end
 
   add_index "saved_searches", ["priority"], name: "index_saved_searches_on_priority", using: :btree

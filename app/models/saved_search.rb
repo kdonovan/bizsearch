@@ -5,8 +5,10 @@ class SavedSearch < ActiveRecord::Base
   has_and_belongs_to_many :listings
   has_many :site_listings, through: :listings
 
+  FILTER_KEYS = %i(city state keyword min_price max_price min_cashflow max_cashflow min_ratio max_ratio min_revenue max_revenue)
+
   def as_filter
-    attributes.symbolize_keys.except(:id, :name, :priority, :created_at, :updated_at, :site_names, :search_group_id)
+    attributes.symbolize_keys.only( FILTER_KEYS )
   end
 
   def sites

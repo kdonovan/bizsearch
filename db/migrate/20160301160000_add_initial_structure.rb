@@ -17,15 +17,15 @@ class AddInitialStructure < ActiveRecord::Migration
     create_table :saved_searches do |t|
       t.belongs_to :search_group, index: true
       t.string :name
-      t.string :state
-      t.string :city
-      t.string :keyword
-      t.integer :min_price
-      t.integer :max_price
-      t.integer :min_cashflow
-      t.integer :max_cashflow
-      t.integer :priority, default: 10, index: true
 
+      t.string :city, :state, :keyword
+      t.integer :min_price, :max_price
+      t.integer :min_cashflow, :max_cashflow
+      t.integer :min_revenue, :max_revenue
+      t.decimal :min_ratio, precision: 3, scale: 1
+      t.decimal :max_ratio, precision: 3, scale: 1
+
+      t.integer :priority, default: 10, index: true
       t.string :site_names, array: true
       t.timestamps null: false
     end
