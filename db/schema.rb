@@ -57,12 +57,14 @@ ActiveRecord::Schema.define(version: 20160301160000) do
     t.integer  "max_cashflow"
     t.integer  "min_revenue"
     t.integer  "max_revenue"
-    t.decimal  "min_ratio",       precision: 3, scale: 1
-    t.decimal  "max_ratio",       precision: 3, scale: 1
-    t.integer  "priority",                                default: 10
-    t.string   "site_names",                                                        array: true
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.decimal  "min_ratio",          precision: 3, scale: 1
+    t.decimal  "max_ratio",          precision: 3, scale: 1
+    t.integer  "min_hours_required"
+    t.integer  "max_hours_required"
+    t.integer  "priority",                                   default: 10
+    t.string   "site_names",                                                           array: true
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
   end
 
   add_index "saved_searches", ["priority"], name: "index_saved_searches_on_priority", using: :btree
@@ -95,6 +97,7 @@ ActiveRecord::Schema.define(version: 20160301160000) do
     t.integer  "real_estate"
     t.integer  "employees"
     t.integer  "established"
+    t.integer  "hours_required"
     t.string   "reason_selling"
     t.boolean  "seller_financing"
     t.boolean  "inventory_included"

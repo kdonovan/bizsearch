@@ -6,8 +6,10 @@ class Site < ActiveRecord::Base
   scope :website,  -> { where(kind: :website) }
   scope :business, -> { where(kind: :business) }
 
-  def adapter(search)
-    api.new( search.as_filter )
+  def adapter(search, options = {})
+    filter = search.respond_to?(:as_filter) ? search.as_filter : search
+
+    api.new( filter, options )
   end
 
   def inspect

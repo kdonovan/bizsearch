@@ -4,18 +4,19 @@ class SavedSearch < ActiveRecord::Base
   belongs_to :search_group
   has_and_belongs_to_many :listings
   has_many :site_listings, through: :listings
+  delegate :user, to: :search_group
 
-  FILTER_KEYS = %i(city state keyword min_price max_price min_cashflow max_cashflow min_ratio max_ratio min_revenue max_revenue)
+  FILTER_KEYS = %i(city state keyword min_price max_price min_cashflow max_cashflow min_ratio max_ratio min_revenue max_revenue min_hours_required max_hours_required)
 
   def as_filter
-    attributes.symbolize_keys.only( FILTER_KEYS )
+    attributes.symbolize_keys.slice( *FILTER_KEYS )
   end
 
   def sites
     Site.where(name: site_names)
   end
 
-  def update
+  def update!
     sites.each do |site|
       SearcherJob.perform_later(saved_search: self, site: site)
     end
@@ -32,7 +33,7 @@ class SavedSearch < ActiveRecord::Base
       when 'website'
         basenames Searchbot.website_sources
       else
-        site_name if Searchbot.source_names.include?(site_name)
+        site_name if basenames(Searchbot.sources).include?(site_name)
       end
     end.compact
   end

@@ -8,8 +8,10 @@ class ListingsController < ApplicationController
   end
 
   def refresh
-    SearcherJob.perform_later
-    flash[:info] = "Started job search agent"
+    # TODO: this should be scoped to the specific search group
+    current_user.saved_searches.each {|s| s.update! }
+
+    flash[:info] = "Started job search agent (refresh in a few minutes to see any updates)"
 
     redirect_to action: :index
   end

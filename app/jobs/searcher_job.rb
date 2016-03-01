@@ -18,7 +18,7 @@ class SearcherJob < ActiveJob::Base
   end
 
   def adapter
-    @adapter ||= site.adapter.new( saved_search.as_filter, seen: seen_ids )
+    @adapter ||= site.adapter( saved_search, seen: seen_ids )
   end
 
 end

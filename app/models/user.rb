@@ -8,4 +8,5 @@ class User < ActiveRecord::Base
   has_many :search_groups
   has_many :notes
   has_many :saved_searches, through: :search_groups
+  has_many :site_listings,  through: :listings
 end

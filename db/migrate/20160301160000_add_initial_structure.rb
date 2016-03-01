@@ -25,6 +25,10 @@ class AddInitialStructure < ActiveRecord::Migration
       t.decimal :min_ratio, precision: 3, scale: 1
       t.decimal :max_ratio, precision: 3, scale: 1
 
+      # Web attributes
+      t.integer :min_hours_required
+      t.integer :max_hours_required
+
       t.integer :priority, default: 10, index: true
       t.string :site_names, array: true
       t.timestamps null: false
@@ -54,7 +58,7 @@ class AddInitialStructure < ActiveRecord::Migration
       t.text :description
       t.string :city, :state, :business_url
 
-      t.integer :ffe, :inventory, :real_estate, :employees, :established
+      t.integer :ffe, :inventory, :real_estate, :employees, :established, :hours_required
       t.string :reason_selling
       t.boolean :seller_financing, :inventory_included, :real_estate_included
 

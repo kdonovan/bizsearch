@@ -6,8 +6,8 @@ class SiteListing < ActiveRecord::Base
   validates :listing, presence: true
   validates :title, presence: true
 
-  def self.handle_new(result, site:)
-    sl = SiteListing.where(site: site, identifier: result[:id]).first_or_initialize
+  def self.handle_new(result, site:, owner:)
+    sl = owner.site_listings.where(site: site, identifier: result[:identifier]).first_or_initialize
     sl.attributes = params_from_result(result)
     sl.skip_listing? ? nil : sl
   end
@@ -34,19 +34,9 @@ class SiteListing < ActiveRecord::Base
 
   private
 
-
-
   def self.params_from_result(result)
-    result = result.detail # Ensure we're working with the full page record
-    keys   = result.keys - UNWANTED_SEARCHBOT_FIELDS
-
-    keys.each_with_object({}) do |key, hash|
-      # Explicitly send, not just to_hash, because we have custom formatting logic in getter methods
-      hash[key] = result.send(key)
-    end
+    result.to_hash.except(:teaser)
   end
-
-  UNWANTED_SEARCHBOT_FIELDS = %i(cashflow_from location source_klass teaser id)
 
   # Allow custom filters (eventually will be user-by-user or search-by-search basis)
   STOPWORDS = [] # %w(plumber plumbing contractor)

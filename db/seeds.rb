@@ -44,4 +44,4 @@ biz_group.saved_searches.update_all max_price: 2_000_000, site_names: ['BizQuest
 
 
 web_group = user.search_groups.create name: 'Interesting Websites'
-web_group.saved_searches.create name: 'Web Test', max_price: 1_600_000, max_ratio: 3, min_cashflow: 50_000, site_names: ['EmpireFlippers']
+web_group.saved_searches.create name: 'Web Test', max_price: 1_600_000, max_ratio: 3, max_hours_required: 5, min_cashflow: 50_000, site_names: ['EmpireFlippers']
