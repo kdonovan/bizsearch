@@ -78,6 +78,9 @@
                 =raw listing.site_listings.map { |sl| link_to sl.site.name, sl.link, target: '_blank' }.join(' | ')
                 ||
                 = link_to 'Details', compare_site_listings_path(listing), remote: true, class: 'remote-modal'
+              - if (links = listing.site_listings.map(&:business_url).compact.uniq).present?
+                ||
+                = links.map {|l| link_to 'Business Link', l, target: '_blank' }.join(' | ')
               .pull-left
                 First seen
                 %strong #{time_ago_in_words listing.created_at} ago

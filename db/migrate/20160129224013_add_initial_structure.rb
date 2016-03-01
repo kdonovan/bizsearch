@@ -36,7 +36,7 @@ class AddInitialStructure < ActiveRecord::Migration
       t.integer :price, :cashflow, :revenue
 
       t.text :description
-      t.string :city, :state
+      t.string :city, :state, :business_url
 
       t.integer :ffe, :inventory, :real_estate, :employees, :established
       t.string :reason_selling
