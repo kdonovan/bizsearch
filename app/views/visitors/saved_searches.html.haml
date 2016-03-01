@@ -2,33 +2,36 @@
 
 %p For now, manage changes to saved searches directly in the database.
 
-.well
-  %table.table.table-hover
-    %tr
-      %th Name
-      %th Priority
-      %th Min Cashflow
-      %th State
-      %th City
-      %th Keyword
-      %th Listings
-      %th Links
+- current_user.search_groups.each do |group|
+  .well
+    %h3= group.name
 
-    - SavedSearch.all.each do |search|
+    %table.table.table-hover
       %tr
-        %td= search.name
-        %td= search.priority
-        %td= dollars search.min_cashflow
-        %td= search.state
-        %td= search.city
-        %td= search.keyword || 'n/a'
-        %td= search.listings.count
-        %td
-          |
-          - Site.all.each do |site|
-            - src = site.adapter.new( search.as_filter )
-            - if src.respond_to?(:url_for_page)
-              = link_to site.name, src.url_for_page(1), target: '_blank'
-            - else
-              #{site.name} (API Only)
+        %th Name
+        %th Priority
+        %th Min Cashflow
+        %th State
+        %th City
+        %th Keyword
+        %th Listings
+        %th Links (only some sources can filter on-site)
+
+      - SavedSearch.all.each do |search|
+        %tr
+          %td= search.name
+          %td= search.priority
+          %td= dollars search.min_cashflow
+          %td= search.state
+          %td= search.city
+          %td= search.keyword || 'n/a'
+          %td= search.listings.count
+          %td
             |
+            - search.sites.each do |site|
+              - src = site.adapter( search )
+              - if src.respond_to?(:url_for_page)
+                = link_to site.name, src.url_for_page(1), target: '_blank'
+              - else
+                #{site.name} (API Only)
+              |

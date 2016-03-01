@@ -6,7 +6,7 @@ class SavedSearch < ActiveRecord::Base
   has_many :site_listings, through: :listings
 
   def as_filter
-    attributes.symbolize_keys.except(:id, :name, :priority, :created_at, :updated_at, :site_names)
+    attributes.symbolize_keys.except(:id, :name, :priority, :created_at, :updated_at, :site_names, :search_group_id)
   end
 
   def sites
@@ -24,11 +24,11 @@ class SavedSearch < ActiveRecord::Base
     raw.flat_map do |site_name|
       case site_name
       when 'all'
-        Searchbot.source_names
+        basenames Searchbot.sources
       when 'business'
-        Searchbot.business_source_names
+        basenames Searchbot.business_sources
       when 'website'
-        Searchbot.website_source_names
+        basenames Searchbot.website_sources
       else
         site_name if Searchbot.source_names.include?(site_name)
       end
@@ -37,5 +37,10 @@ class SavedSearch < ActiveRecord::Base
 
   private
 
+  def basenames(modules)
+    modules.map do |module_name|
+      module_name.name.split('::').last
+    end
+  end
 
 end

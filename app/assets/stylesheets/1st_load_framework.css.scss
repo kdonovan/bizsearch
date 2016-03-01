@@ -37,7 +37,7 @@ html {
   height: 100%;
 }
 
-body.VisitorsController {
+body.VisitorsController, body.Devise-SessionsController {
   background-color: #000;
   background: url(intro-bg.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -45,7 +45,7 @@ body.VisitorsController {
   -o-background-size: cover;
   background-size: cover;
   .navbar-fixed-top {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(50, 50, 50, 0.9);
     .a, .navbar-brand {
       color: #FFF;
     }

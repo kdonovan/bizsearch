@@ -14,7 +14,7 @@ Searchbot.website_sources.each do |src|
   Site.create(name: src.name.split('::').last, kind: :website)
 end
 
-user = User.create email: 'abc@def.com', password: 'password', password_confirmation: 'password'
+user = User.create email: "#{`whoami`.strip}@deviantech.com", password: 'password', password_confirmation: 'password'
 
 group = user.search_groups.create name: 'Seattle Businesses'
 
