@@ -2,20 +2,17 @@
 
 
 .row
-  - # TODO: update page to show listings for a search group, then show most/least recently updated searches here
-  - if most_recent = Listing.order(:created_at).last
-    %p.col-sm-6
-      Last listing pulled on #{most_recent.created_at.strftime("%B %e, %Y (%Z)")}
-    %em
-      (#{link_to 'refresh', run_searches_path, method: :post}).
+  .col-sm-6
+    = render partial: 'listings_header'
 
-  %p.col-sm-6
-    %strong Showing:
-    = link_to_unless_current 'Yep', listings_path(status: :yep)
-    |
-    = link_to_unless_current 'Nope', listings_path(status: :nope)
-    |
-    = link_to_unless params[:status].blank? || params[:status] == 'maybe', 'Undecided', listings_path(status: :maybe)
+  .col-sm-6
+    %p
+      %strong Showing:
+      = link_to_unless_current 'Yep', listings_path(status: :yep)
+      |
+      = link_to_unless_current 'Nope', listings_path(status: :nope)
+      |
+      = link_to_unless params[:status].blank? || params[:status] == 'maybe', 'Undecided', listings_path(status: :maybe)
 
 %hr
 - if @listings.length.zero?

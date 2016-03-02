@@ -1,0 +1,9 @@
+%p
+  Showing #{filter_label}
+  - if @search
+    listings for your #{link_to @search.name, searches_path(anchor: @search.id)} search group.
+  - else
+    listings.
+
+  %em
+    #{link_to 'Refresh', run_searches_path, method: :post}.

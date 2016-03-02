@@ -11,4 +11,8 @@ Rails.application.routes.draw do
   resources :listings do
     resources :notes
   end
+
+  resources :searches, only: [:index] do
+    resources :listings
+  end
 end

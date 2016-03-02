@@ -2,9 +2,9 @@
 
 %p For now, manage changes to saved searches directly in the database.
 
-- current_user.search_groups.each do |group|
+- @searches.each do |group|
   .well
-    %h3= group.name
+    %h3{id: group.id}= link_to group.name, search_listings_path(group)
 
     %table.table.table-hover
       %tr
@@ -17,7 +17,7 @@
         %th Listings
         %th Links (only some sources can filter on-site)
 
-      - SavedSearch.all.each do |search|
+      - group.saved_searches.each do |search|
         %tr
           %td= search.name
           %td= search.priority

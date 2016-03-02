@@ -1,10 +1,9 @@
 class ListingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_listing, only: [:decide, :compare]
+  before_action :get_listings, only: [:index]
+  before_action :get_listing,  only: [:decide, :compare]
 
   def index
-    scope = %w(yep nope).include?(params[:status]) ? params[:status] : 'undecided'
-    @listings = current_user.listings.send(scope).includes(:site_listings)
   end
 
   def refresh
@@ -30,8 +29,23 @@ class ListingsController < ApplicationController
 
   private
 
+  def base
+    get_search || current_user
+  end
+
   def get_listing
-    @listing = current_user.listings.find(params[:id])
+    @listing = base.listings.find(params[:id])
+  end
+
+  def get_listings
+    scope = %w(yep nope).include?(params[:status]) ? params[:status] : 'undecided'
+    @listings = base.listings.send(scope).includes(:site_listings)
+  end
+
+  def get_search
+    if params[:search_id]
+      @search = current_user.search_groups.find(params[:search_id])
+    end
   end
 
 end

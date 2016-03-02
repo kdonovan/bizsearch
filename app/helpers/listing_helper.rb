@@ -44,6 +44,12 @@ module ListingHelper
     render partial: 'comparison_rows', locals: {rows: rows}
   end
 
-
+  def filter_label
+    case params[:status]
+    when 'yep'  then 'accepted'
+    when 'nope' then 'rejected'
+    else 'all'
+    end
+  end
 
 end
