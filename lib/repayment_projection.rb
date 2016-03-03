@@ -7,7 +7,7 @@ class RepaymentProjection
     @sources = [
       @kali = MoneySource.new(max:  20_000, rate: 0.01, years:  5, price: listing.price),
       @ruth = MoneySource.new(max: 300_000, rate: 0.03, years:  5, price: listing.price - kali.amount_covering),
-      @sba  = MoneySource.new(              rate: 0.06, years: 10, price: listing.price - kali.amount_covering - ruth.amount_covering),
+      @sba  = SBAMoneySource.new(owner_contributions: @kali.max + @ruth.max, rate: 0.06, years: 10, price: listing.price - kali.amount_covering - ruth.amount_covering),
     ]
   end
 
@@ -24,12 +24,12 @@ class RepaymentProjection
   end
 
   def cashflow_after_repayment
-    return unless listing.cashflow
+    return unless listing.cashflow && listing.price < sources.sum(&:max)
     listing.cashflow - yearly
   end
 
   def cashflow_post_tax_and_repayment
-    return unless listing.cashflow
+    return unless listing.cashflow && listing.price < sources.sum(&:max)
     ((1 - tax_rate) * listing.cashflow) - yearly
   end
 
@@ -91,6 +91,26 @@ class MoneySource
 
   def loan_cost
     (yearly * years) - amount_covering
+  end
+
+end
+
+class SBAMoneySource < MoneySource
+
+  attr_accessor :owner_contributions
+
+  def initialize(price:, rate:, years:, owner_contributions:, max: nil)
+    @owner_contributions = owner_contributions
+    super(price: price, rate: rate, years: years, max: max)
+  end
+
+  # SBA loan maxes out at 5k, and will require 10-25% owner downpayment.
+  # I find 25 with less experience, but may be able to do small seller note
+  # to count for some (only if it's held in abeyance until the SBA is paid off),
+  # so using 20% here for projections (Kali can probably go closer to 15 for some web,
+  # but don't want to rely on convincing them of that when running the numbers).
+  def max
+    [5_000_000, owner_contributions * 0.2].min
   end
 
 end
