@@ -58,8 +58,8 @@ class AddInitialStructure < ActiveRecord::Migration
       t.text :description
       t.string :city, :state, :business_url
 
-      t.integer :ffe, :inventory, :real_estate, :employees, :established, :hours_required
-      t.string :reason_selling
+      t.integer :ffe, :inventory, :real_estate, :hours_required
+      t.string :reason_selling, :established, :employees
       t.boolean :seller_financing, :inventory_included, :real_estate_included
 
       t.timestamps null: false

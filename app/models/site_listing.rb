@@ -16,7 +16,7 @@ class SiteListing < ActiveRecord::Base
   def duplicates_on_other_networks(saved_search)
     scope = saved_search.site_listings.where.not(site_id: site.id)
 
-    %i(city state established).each do |attr|
+    %i(city state).each do |attr|
       scope = narrow_by(scope, attr)
     end
 
