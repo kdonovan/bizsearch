@@ -2,7 +2,7 @@ development:
   adapter: postgresql
   encoding: utf8
   reconnect: false
-  database: bizsearch_development
+  database: bizsearch_<%= ENV['REAL'] ? 'kali' : 'development' %>
   pool: 5
   username: kali
   password:

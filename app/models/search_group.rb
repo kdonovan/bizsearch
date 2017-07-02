@@ -1,6 +1,6 @@
 class SearchGroup < ActiveRecord::Base
   belongs_to :user
-  has_many :saved_searches
+  has_many :saved_searches, dependent: :destroy
   has_many :listings, through: :saved_searches
   has_many :site_listings, through: :listings
 

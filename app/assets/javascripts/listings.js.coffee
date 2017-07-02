@@ -43,9 +43,18 @@ initListingTable = ->
       tr.addClass('shown')
       tr.find('#note_body').focus()
 
+
   # Handle clicks via ajax
   $(".buttons").on "ajax:success", ->
-    $(this).closest('tr').hide()
+    tr = $(this).closest('tr')
+
+    if tr.find('#note_body').val().length > 0
+      tr.find('.note-form').submit()
+
+    row = table.row( tr )
+    if row.child.isShown()
+      row.child.hide()
+    tr.hide()
 
   $('#listings-table .note-form').on 'ajax:success', (e, data, status, xhr) ->
     f = $(this)

@@ -1,12 +1,12 @@
-class Searcher
+module Searcher
 
-  def import_search_results
-    saved_searches.map(&:update)
+  def self.import_search_results!
+    saved_searches.map(&:update!)
   end
 
   private
 
-  def saved_searches
+  def self.saved_searches
     SavedSearch.all
   end
 

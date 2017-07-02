@@ -1,7 +1,7 @@
 # Ideally each business for sale has a single listing, delegating to separate SiteListings
 # as needed when the same business is listed on multiple sites.
 class Listing < ActiveRecord::Base
-  # TODO: if we every really add multiple users, convert this to
+  # TODO: if we ever really add multiple users, convert this to
   # has_many :through, and move the state machine, etc. to the join model.
   belongs_to :user
   has_many :site_listings, dependent: :destroy
